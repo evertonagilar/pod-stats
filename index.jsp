@@ -53,7 +53,7 @@
 
 
     <div class="d-md-flex flex-md-row-reverse align-items-center justify-content-between">
-        <div class="mb-3 mb-md-0 d-flex text-nowrap"><a class="btn btn-sm btn-bd-light rounded-2" href="https://evertonagilar/breadcrumb.md" title="View and edit this file on GitHub" target="_blank" rel="noopener">
+        <div class="mb-3 mb-md-0 d-flex text-nowrap"><a class="btn btn-sm btn-bd-light rounded-2" href="https://github.com/evertonagilar/pod-stats" title="View and edit this file on GitHub" target="_blank" rel="noopener">
             View on GitHub
         </a>
         </div>
