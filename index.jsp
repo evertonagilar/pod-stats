@@ -140,12 +140,9 @@
                 long usableSpaceInGB = usableSpaceInBytes / (1024 * 1024 * 1024);
             %>
 
-            <p class="card-text"><strong>Total de Espaço em Disco (MB/GB):</strong> <%=totalSpaceInMB%> MB /
-                <%=totalSpaceInGB%> GB</p>
-            <p class="card-text"><strong>Espaço em Disco Livre (MB/GB):</strong> <%=freeSpaceInMB%> MB / <
-            %=freeSpaceInGB%> GB</p>
-            <p class="card-text"><strong>Espaço em Disco Utilizável (MB/GB):</strong> <%=usableSpaceInMB%> MB / <
-            %=usableSpaceInGB%> GB</p>
+            <p class="card-text"><strong>Total de Espaço em Disco (MB/GB):</strong> <%=totalSpaceInMB%> MB / <%=totalSpaceInGB%> GB</p>
+            <p class="card-text"><strong>Espaço em Disco Livre (MB/GB):</strong> <%=freeSpaceInMB%> MB / <%=freeSpaceInGB%> GB</p>
+            <p class="card-text"><strong>Espaço em Disco Utilizável (MB/GB):</strong> <%=usableSpaceInMB%> MB / <%=usableSpaceInGB%> GB</p>
         </div>
     </div>
 
