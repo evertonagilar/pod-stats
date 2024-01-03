@@ -11,6 +11,7 @@
 /.settings/
 /nbproject/
 .vscode
+out/
 
 # Arquivos de build e compilação frontend
 *.o

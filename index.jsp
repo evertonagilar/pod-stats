@@ -1,6 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@page import="java.io.File, java.io.BufferedReader, java.io.InputStreamReader" %>
 <%@page import="java.text.SimpleDateFormat, java.util.*" %>
+<%@ page import="java.lang.management.MemoryMXBean" %>
+<%@ page import="java.lang.management.ManagementFactory" %>
+<%@ page import="java.lang.management.MemoryUsage" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -114,6 +117,44 @@
             <p><strong>Memória Livre (MB):</strong> <%=(Runtime.getRuntime().freeMemory() / (1024 * 1024))%></p>
             <p><strong>Memória Máxima (MB):</strong> <%=(Runtime.getRuntime().maxMemory() / (1024 * 1024))%></p>
             <p><strong>Quantidade de Threads Ativas:</strong> <%=Thread.activeCount()%></p>
+
+            <%
+            MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+            MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+            MemoryUsage nonHeapMemoryUsage = memoryBean.getNonHeapMemoryUsage();
+
+            out.println("<hr>");
+            out.println("<p><strong>Heap Memory:</strong></p>");
+            out.println("<p>   Initial: " + heapMemoryUsage.getInit() / (1024 * 1024) + " MB</p>");
+            out.println("<p>   Used: " + heapMemoryUsage.getUsed() / (1024 * 1024) + " MB</p>");
+            out.println("<p>   Committed: " + heapMemoryUsage.getCommitted() / (1024 * 1024) + " MB</p>");
+            out.println("<p>   Max: " + heapMemoryUsage.getMax() / (1024 * 1024) + " MB</p>");
+
+            out.println("<p><strong>Non-Heap Memory:</strong></p>");
+            out.println("<p>   Initial: " + nonHeapMemoryUsage.getInit() / (1024 * 1024) + " MB</p>");
+            out.println("<p>   Used: " + nonHeapMemoryUsage.getUsed() / (1024 * 1024) + " MB</p>");
+            out.println("<p>   Committed: " + nonHeapMemoryUsage.getCommitted() / (1024 * 1024) + " MB</p>");
+            out.println("<p>   Max: " + nonHeapMemoryUsage.getMax() / (1024 * 1024) + " MB</p>");
+
+
+            out.println("<p><strong>Informações do SO ( -XshowSettings )</strong></p>");
+
+
+            try {
+                Process showSettingsProcess = Runtime.getRuntime().exec("java -XshowSettings:system --version");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(showSettingsProcess.getErrorStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.startsWith("NODE") && !line.startsWith("Operating") && line.length() > 10) {
+                        out.println("<p>" + line + "</p>");
+                    }
+                }
+            } catch (Exception e) {
+                out.println("Erro ao executar o comando: " + e.getMessage());
+            }
+
+            %>
+
         </div>
     </div>
 
