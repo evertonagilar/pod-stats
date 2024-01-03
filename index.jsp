@@ -4,53 +4,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>app-info</title>
     <%!
         String title = "Informações do pod/container";
         String loadAvg;
     %>
-
-    <!-- Bootstrap CSS CDN -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <style>
-        /* Estilos para mostrar o payload */
-        .payload-box {
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            padding: 10px;
-            margin: 10px 0;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-        }
-
-        /* Estilos para a banda com rolagem vertical */
-        .scrollable-band {
-            max-height: 400px;  /* Altura máxima */
-            overflow-y: auto;   /* Rolagem vertical */
-            border: 1px solid #ccc;  /* Borda para visualização */
-            padding: 10px;     /* Espaçamento interno */
-        }
-
-        /* Estilos para o painel estilo Bash */
-        .bash-panel {
-            background-color: #2e3436;
-            color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 10px;
-            border-radius: 5px;
-            white-space: pre-wrap; /* Manter quebras de linha */
-        }
-        .bash-panel pre {
-            margin: 0; /* Remover margens padrão */
-        }
-    </style>
+    <link href="estilo.css" rel="stylesheet" />
 </head>
 <body>
 <div class="container mt-5">
-
 
     <div class="d-md-flex flex-md-row-reverse align-items-center justify-content-between">
         <div class="mb-3 mb-md-0 d-flex text-nowrap"><a class="btn btn-sm btn-bd-light rounded-2" href="https://github.com/evertonagilar/pod-stats" title="View and edit this file on GitHub" target="_blank" rel="noopener">
@@ -338,13 +303,11 @@
     </div>
 
     <div style="text-align:center" class="mt-4">
-        <p>Portal para apresentar informações de diagnóstico sobre pod/container</p>
+        <p>Portal para apresentar informações de diagnóstico do pod/container</p>
         <p>Desenvolvido por Everton de Vargas Agilar</p>
     </div>
 
-
 </div>
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

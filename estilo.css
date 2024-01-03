@@ -1,0 +1,22 @@
+/* Estilos para mostrar o payload */
+.payload-box {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 10px 0;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+}
+
+/* Estilos para o painel estilo Bash */
+.bash-panel {
+    background-color: #2e3436;
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    border-radius: 5px;
+    white-space: pre-wrap; /* Manter quebras de linha */
+}
+.bash-panel pre {
+    margin: 0; /* Remover margens padrão */
+}
