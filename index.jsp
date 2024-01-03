@@ -74,7 +74,7 @@
 
     <div class="card mt-4">
         <div class="card-header">
-            Informações do locale
+            Informações do locale da requisição
         </div>
 
         <div class="card-body">
@@ -232,7 +232,7 @@
 
     <div class="card mt-4">
         <div class="card-header">
-            Variáveis de Ambiente
+            Variáveis de ambiente
         </div>
 
         <div class="card-body">
