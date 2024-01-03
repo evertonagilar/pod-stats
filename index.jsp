@@ -145,7 +145,7 @@
                 BufferedReader reader = new BufferedReader(new InputStreamReader(showSettingsProcess.getErrorStream()));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    if (!line.startsWith("NOTE") && !line.startsWith("Operating") && line.length() > 10) {
+                    if (!line.startsWith("NOTE") && !line.startsWith("Operating") && !line.startsWith("List") && line.length() > 10) {
                         out.println("<p>" + line + "</p>");
                     }
                 }
