@@ -4,16 +4,29 @@
 <%@ page import="java.lang.management.MemoryMXBean" %>
 <%@ page import="java.lang.management.ManagementFactory" %>
 <%@ page import="java.lang.management.MemoryUsage" %>
+<%@ page import="java.util.Base64" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <%!
-        String title = "Informações do pod/container";
-        String loadAvg;
+    <%
+        String title = "Informações de diagnóstico";
+        String token = "f316d453-22e6-49db-81ca-6cf0332c3e09";
+        String headerAuthorization = request.getHeader("Authorization");
+        String queryStringToken = request.getParameter("token");
+        boolean tokenValidado = false;
+        if (headerAuthorization != null && headerAuthorization.startsWith("Bearer ")) {
+            String encodedToken = headerAuthorization.substring(7).trim();
+            String decodedToken = new String(Base64.getDecoder().decode(encodedToken));
+            if (!token.equals(decodedToken)) {
+                tokenValidado = true;
+            }
+        } else if (queryStringToken != null && token.equals(queryStringToken)) {
+            tokenValidado = true;
+        }
     %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%=title%></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="estilo.css" rel="stylesheet" />
 </head>
@@ -25,27 +38,29 @@
             View on GitHub
         </a>
         </div>
-        <h1 class="bd-title mb-0" id="content"><%= title %></h1>
+        <h1 class="bd-title mb-0" id="content"><%=title%></h1>
     </div>
 
-    <%
-        try{
-            Process loadAvgProcess = Runtime.getRuntime().exec("cat /proc/loadavg");
-            try (java.util.Scanner scanner = new java.util.Scanner(loadAvgProcess.getInputStream()).useDelimiter("\\A")) {
-                loadAvg = scanner.hasNext() ? scanner.next() : "";
-                loadAvg = loadAvg.replaceAll(" ", "&nbsp;&nbsp;&nbsp;");
-            } catch (Exception e) {
-                out.println("Erro ao executar o comando: " + e.getMessage());
-            }
-        } catch (Exception e) {
-            out.println("Erro ao executar o comando: " + e.getMessage());
-        }
-    %>
 
     <p class="mt-2">
         <b>Data da requisição: </b> <%=new SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(new java.util.Date())%>
+        <% if (tokenValidado) {
+            final String loadAvgCommand = "cat /proc/loadavg";
+            String loadAvg = "";
+            try {
+                Process loadAvgProcess = Runtime.getRuntime().exec(loadAvgCommand);
+                try (java.util.Scanner scanner = new java.util.Scanner(loadAvgProcess.getInputStream()).useDelimiter("\\A")) {
+                    loadAvg = scanner.hasNext() ? scanner.next() : "";
+                    loadAvg = loadAvg.replaceAll(" ", "&nbsp;&nbsp;&nbsp;");
+                }
+            } catch (Exception e) {
+                out.println("Erro ao executar o comando: " + loadAvgCommand);
+                out.println(e.getMessage());
+            }
+        %>
         <span style="display:inline-block; width: 20px"></span>
         <b>Load-avg: </b> <%=loadAvg%>
+        <% } %>
     </p>
 
 
@@ -57,6 +72,14 @@
         <div class="card-body">
             <p><strong>Nome do Host:</strong> <%=java.net.InetAddress.getLocalHost().getHostName()%> </p>
             <p><strong>Endereço IP do Host:</strong> <%=java.net.InetAddress.getLocalHost().getHostAddress()%> </p>
+            <% if (tokenValidado) {
+                String forwardedFor = request.getHeader("X-Forwarded-For");
+                if (forwardedFor != null && !forwardedFor.isEmpty()) {
+            %>
+            <p><strong>Proxy de Forward: </strong> <%= forwardedFor %></p>
+            <% } else{ %>
+            <p><strong>Proxy de Forward: </strong> Não detectado</p>
+            <% }} %>
         </div>
     </div>
 
@@ -74,6 +97,7 @@
         </div>
     </div>
 
+    <% if (tokenValidado) { %>
 
     <div class="card mt-4">
         <div class="card-header">
@@ -119,39 +143,40 @@
             <p><strong>Quantidade de Threads Ativas:</strong> <%=Thread.activeCount()%></p>
 
             <%
-            MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
-            MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
-            MemoryUsage nonHeapMemoryUsage = memoryBean.getNonHeapMemoryUsage();
+                MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+                MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+                MemoryUsage nonHeapMemoryUsage = memoryBean.getNonHeapMemoryUsage();
 
-            out.println("<hr>");
-            out.println("<p><strong>Heap Memory:</strong></p>");
-            out.println("<p>   Initial: " + heapMemoryUsage.getInit() / (1024 * 1024) + " MB</p>");
-            out.println("<p>   Used: " + heapMemoryUsage.getUsed() / (1024 * 1024) + " MB</p>");
-            out.println("<p>   Committed: " + heapMemoryUsage.getCommitted() / (1024 * 1024) + " MB</p>");
-            out.println("<p>   Max: " + heapMemoryUsage.getMax() / (1024 * 1024) + " MB</p>");
+                out.println("<hr>");
+                out.println("<p><strong>Heap Memory:</strong></p>");
+                out.println("<p>   Initial: " + heapMemoryUsage.getInit() / (1024 * 1024) + " MB</p>");
+                out.println("<p>   Used: " + heapMemoryUsage.getUsed() / (1024 * 1024) + " MB</p>");
+                out.println("<p>   Committed: " + heapMemoryUsage.getCommitted() / (1024 * 1024) + " MB</p>");
+                out.println("<p>   Max: " + heapMemoryUsage.getMax() / (1024 * 1024) + " MB</p>");
 
-            out.println("<p><strong>Non-Heap Memory:</strong></p>");
-            out.println("<p>   Initial: " + nonHeapMemoryUsage.getInit() / (1024 * 1024) + " MB</p>");
-            out.println("<p>   Used: " + nonHeapMemoryUsage.getUsed() / (1024 * 1024) + " MB</p>");
-            out.println("<p>   Committed: " + nonHeapMemoryUsage.getCommitted() / (1024 * 1024) + " MB</p>");
-            out.println("<p>   Max: " + nonHeapMemoryUsage.getMax() / (1024 * 1024) + " MB</p>");
-
-
-            out.println("<p><strong>Informações do SO ( -XshowSettings )</strong></p>");
+                out.println("<p><strong>Non-Heap Memory:</strong></p>");
+                out.println("<p>   Initial: " + nonHeapMemoryUsage.getInit() / (1024 * 1024) + " MB</p>");
+                out.println("<p>   Used: " + nonHeapMemoryUsage.getUsed() / (1024 * 1024) + " MB</p>");
+                out.println("<p>   Committed: " + nonHeapMemoryUsage.getCommitted() / (1024 * 1024) + " MB</p>");
+                out.println("<p>   Max: " + nonHeapMemoryUsage.getMax() / (1024 * 1024) + " MB</p>");
 
 
-            try {
-                Process showSettingsProcess = Runtime.getRuntime().exec("java -XshowSettings:system --version");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(showSettingsProcess.getErrorStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (!line.startsWith("NOTE") && !line.startsWith("Operating") && !line.startsWith("List") && line.length() > 10) {
-                        out.println("<p>" + line + "</p>");
+                out.println("<p><strong>Informações do SO ( -XshowSettings )</strong></p>");
+
+                final String showSettingsCmd = "java -XshowSettings:system --version";
+                try {
+                    Process showSettingsProcess = Runtime.getRuntime().exec(showSettingsCmd);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(showSettingsProcess.getErrorStream()));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        if (!line.startsWith("NOTE") && !line.startsWith("Operating") && !line.startsWith("List") && line.length() > 10) {
+                            out.println("<p>" + line + "</p>");
+                        }
                     }
+                } catch (Exception e) {
+                    out.println("Erro ao executar o comando: " + showSettingsCmd);
+                    out.println(e.getMessage());
                 }
-            } catch (Exception e) {
-                out.println("Erro ao executar o comando: " + e.getMessage());
-            }
 
             %>
 
@@ -229,7 +254,6 @@
                 StringBuilder payload = new StringBuilder();
                 String line;
                 int bytesRead = 0;
-
                 while ((line = reader.readLine()) != null && bytesRead < 600) {
                     payload.append(line);
                     bytesRead += line.length();
@@ -279,11 +303,51 @@
         <div class="card-body">
             <ul>
                 <%
-                    // Obter e exibir variáveis de ambiente
+                    // Definição de cores para cada tipo de variável
+                    Map<String, String> colors = new HashMap<>();
+                    colors.put("DEFAULT", "black");
+                    colors.put("KUBERNETES_", "navy");
+                    colors.put("DB_", "blue");
+                    colors.put("JDBC_", "DarkRed");
+                    colors.put("EJB_", "brown");
+                    colors.put("HTTP_", "OrangeRed");
+                    colors.put("TCP_", "teal");
+                    colors.put("THREAD_", "teal");
+                    colors.put("PAYARA_", "gold");
+                    colors.put("SERVER_", "Tomato");
+                    colors.put("SIE_", "Gold");
+                    colors.put("TIMER_", "LightCoral");
+                    colors.put("JMS_", "DarkSalmon");
+                    colors.put("EMAIL_", "blue");
+                    colors.put("LOG_", "indigo");
+                    colors.put("LOGIN_", "green");
+                    colors.put("DIPLOMA_", "coral");
+                    colors.put("MEM_", "brown");
+                    colors.put("LC_", "darkgreen");
+                    colors.put("JVM_", "magenta");
+                    colors.put("IS_", "sienna");
+                    colors.put("LDAP_", "olive");
+                    colors.put("METRICS_", "Tomato");
+                    colors.put("MONITOR_", "Tomato");
+                    colors.put("POSTBOOT_", "MediumSlateBlue");
+                    colors.put("PREBOOT_", "MediumSlateBlue");
+                    colors.put("TZ_", "MediumSlateBlue");
+                    colors.put("USA_", "MediumSlateBlue");
+                    colors.put("SCRIPT_", "MediumSlateBlue");
+                    colors.put("PORT_", "MediumSlateBlue");
+                    colors.put("HISTLOG_", "MediumSlateBlue");
+                    colors.put("GLASSFISH_", "MediumSlateBlue");
+                    colors.put("DOMAIN_", "MediumSlateBlue");
+                    colors.put("DOCROOT_", "MediumSlateBlue");
                     Map<String, String> envVariables = new HashMap<>(System.getenv());
-
-                    for (Map.Entry<String, String> entry : envVariables.entrySet()) {
-                        out.println("<li><strong>" + entry.getKey() + ":</strong> " + entry.getValue() + "</li>");
+                    List<Map.Entry<String, String>> envVariablesSorted = new ArrayList<>(envVariables.entrySet());
+                    Collections.sort(envVariablesSorted, Map.Entry.comparingByKey());
+                    for (Map.Entry<String, String> entry : envVariablesSorted) {
+                        String key = entry.getKey();
+                        String value = entry.getValue();
+                        String prefix = key.contains("_") ? key.substring(0, key.indexOf('_') + 1).toUpperCase() : "DEFAULT";
+                        String color = colors.getOrDefault(prefix, "black");
+                        out.println("<li><strong style='color:" + color + "'>" + key + ":</strong> " + value + "</li>");
                     }
                 %>
             </ul>
@@ -299,8 +363,9 @@
             <div class="card-body">
                 <div class="bash-panel">
                     <%
+                        final String cmdLineCommand = "cat /proc/1/cmdline";
                         try {
-                            Process cmdLineProcess = Runtime.getRuntime().exec("cat /proc/1/cmdline");
+                            Process cmdLineProcess = Runtime.getRuntime().exec(cmdLineCommand);
                             try (java.util.Scanner scanner = new java.util.Scanner(cmdLineProcess.getInputStream()).useDelimiter("\\A")) {
                                 String content = scanner.hasNext() ? scanner.next() : "Nenhuma saída disponível.";
                                 // Substituir caracteres nulos por espaços e adicionar novas linhas
@@ -308,7 +373,8 @@
                                 out.println(content);
                             }
                         } catch (Exception e) {
-                            out.println("Erro ao executar o comando: " + e.getMessage());
+                            out.println("Erro ao executar o comando: "+ cmdLineCommand);
+                            out.println(e.getMessage());
                         }
                     %>
                 </div>
@@ -325,14 +391,16 @@
             <div class="card-body">
                 <div class="bash-panel">
                     <%
+                        final String cmdDfCommand = "df -h";
                         try {
-                            Process process = Runtime.getRuntime().exec("df -h");
+                            Process process = Runtime.getRuntime().exec(cmdDfCommand);
                             try (java.util.Scanner scanner = new java.util.Scanner(process.getInputStream()).useDelimiter("\\A")) {
                                 String dfContent = scanner.hasNext() ? scanner.next() : "Nenhuma saída disponível.";
                                 out.println(dfContent);
                             }
                         } catch (Exception e) {
-                            out.println("Erro ao executar o comando: " + e.getMessage());
+                            out.println("Erro ao executar o comando: " + cmdDfCommand);
+                            out.println(e.getMessage());
                         }
                     %>
                 </div>
@@ -340,8 +408,46 @@
         </div>
     </div>
 
+
+    <%
+        boolean metricsEnabled = System.getenv("METRICS_ENABLED") != null && System.getenv("METRICS_ENABLED").equals("true");
+        if (metricsEnabled){
+    %>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                Métricas do servidor de aplicação
+            </div>
+            <div class="card-body">
+                <div class="bash-panel">
+                    <%
+                        String metricsCmd = System.getenv("AS_ASADMIN") + " get -m 'server.*'";
+                        try {
+                            Process cmdMetricsProcess = Runtime.getRuntime().exec(metricsCmd);
+                            try (java.util.Scanner scanner = new java.util.Scanner(cmdMetricsProcess.getInputStream()).useDelimiter("\\A")) {
+                                String content = scanner.hasNext() ? scanner.next() : "Nenhuma saída disponível.";
+                                // Substituir caracteres nulos por espaços e adicionar novas linhas
+                                content = content.replaceAll("\0", " ");
+                                out.println(content);
+                            }
+                        } catch (Exception e) {
+                            out.println("Erro ao executar o comando: " + metricsCmd);
+                            out.println(e.getMessage());
+                        }
+                    %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%
+        }
+    %>
+
+    <!-- fecha if token válido -->
+    <% } %>
+
     <div style="text-align:center" class="mt-4">
-        <p>Portal para apresentar informações de diagnóstico do pod/container</p>
+        <p>Portal para apresentar informações de diagnóstico do container</p>
         <p>Desenvolvido por Everton de Vargas Agilar</p>
     </div>
 
