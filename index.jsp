@@ -10,17 +10,17 @@
 <head>
     <%
         String title = "Informações de diagnóstico";
-        String token = "f316d453-22e6-49db-81ca-6cf0332c3e09";
+        String token = System.getenv("TOKEN");
         String headerAuthorization = request.getHeader("Authorization");
-        String queryStringToken = request.getParameter("token");
+        String qsToken = request.getParameter("token");
         boolean tokenValidado = false;
-        if (headerAuthorization != null && headerAuthorization.startsWith("Bearer ")) {
+        if (token != null && headerAuthorization != null && headerAuthorization.startsWith("Bearer ")) {
             String encodedToken = headerAuthorization.substring(7).trim();
             String decodedToken = new String(Base64.getDecoder().decode(encodedToken));
             if (!token.equals(decodedToken)) {
                 tokenValidado = true;
             }
-        } else if (queryStringToken != null && token.equals(queryStringToken)) {
+        } else if (qsToken != null && token.equals(qsToken)) {
             tokenValidado = true;
         }
     %>
@@ -313,15 +313,12 @@
                     colors.put("HTTP_", "OrangeRed");
                     colors.put("TCP_", "teal");
                     colors.put("THREAD_", "teal");
-                    colors.put("PAYARA_", "gold");
+                    colors.put("PAYARA_", "#900C3F");
                     colors.put("SERVER_", "Tomato");
-                    colors.put("SIE_", "Gold");
-                    colors.put("TIMER_", "LightCoral");
+                    colors.put("TIMER_", "Light#900C3F");
                     colors.put("JMS_", "DarkSalmon");
-                    colors.put("EMAIL_", "blue");
                     colors.put("LOG_", "indigo");
-                    colors.put("LOGIN_", "green");
-                    colors.put("DIPLOMA_", "coral");
+                    colors.put("JAVA_", "#900C3F");
                     colors.put("MEM_", "brown");
                     colors.put("LC_", "darkgreen");
                     colors.put("JVM_", "magenta");
@@ -337,6 +334,8 @@
                     colors.put("PORT_", "MediumSlateBlue");
                     colors.put("HISTLOG_", "MediumSlateBlue");
                     colors.put("GLASSFISH_", "MediumSlateBlue");
+                    colors.put("TOMCAT_", "#900C3F");
+                    colors.put("CATALINA_", "#900C3F");
                     colors.put("DOMAIN_", "MediumSlateBlue");
                     colors.put("DOCROOT_", "MediumSlateBlue");
                     Map<String, String> envVariables = new HashMap<>(System.getenv());
