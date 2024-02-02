@@ -1,14 +1,11 @@
 # [pod-stats](https://hub.docker.com/layers/evertonagilar/pod-stats)
 
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/evertonagilar/pod-stats)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-46a2f1?logo=docker&logoColor=white)](https://hub.docker.com/layers/evertonagilar/pod-stats)
+
 
 Imagem docker de teste para exibir informações de diagnóstico de requisições HTTP
 
 [Acesso o projeto no dockerhub](https://hub.docker.com/layers/evertonagilar/pod-stats).
-
-
-## Criado por Everton de Vargas Agilar
-
 
 
 ### Funcionalidades
@@ -48,6 +45,11 @@ jar -cvf dist/pod-stats.war index.jsp estilo.css WEB-INF
 ### Tela
 
 ![alt text for screen readers](screen.png "Exemplo de tela do portal").
+
+
+### Autor
+
+Copyright 2024 - Everton de Vargas Agilar
 
 
 
