@@ -1,4 +1,6 @@
-## Imagem docker de teste para exibir informações de diagnóstico da requisição HTTP
+# Imagem docker de teste para exibir informações de diagnóstico da requisição HTTP
+
+## Criado por Everton de Vargas Agilar
 
 ### Funcionalidades
 
@@ -9,7 +11,7 @@
 - Permite visualizar o /proc/1/cmdline do container
 
 
-### Como usar
+### Subir container Docker
 
 ```bash
 # Gerar um token para servir de credencial para obter informações completas do container
@@ -24,8 +26,20 @@ docker run --env TOKEN=$TOKEN ---env COLOR=silver -p 8080:8080 evertonagilar/pod
 curl "http://localhost:8080/pod-stats/index.jsp?token=$TOKEN"
 ```
 
+
+### Apenas gerar o pacote pod-stats.war
+
+```bash
+mkdir -p dist/
+# Só tem um index.jsp de código fonte, portanto o build é muito simples! 
+jar -cvf dist/pod-stats.war index.jsp estilo.css WEB-INF
+```
+
+
 ### Tela
 
 ![alt text for screen readers](screen.png "Exemplo de tela do portal").
+
+
 
 
