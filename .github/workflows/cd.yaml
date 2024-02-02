@@ -22,7 +22,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        repository: evertonagilar/pod-stats
         tags: ${{ github.sha }}, latest
 
 
