@@ -22,8 +22,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags:
-          - evertonagilar/pod-stats:1.0.0
-          - evertonagilar/pod-stats:latest
+        tags: evertonagilar/pod-stats:1.0.0 evertonagilar/pod-stats:latest
 
 
