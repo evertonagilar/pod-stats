@@ -9,4 +9,4 @@
 /nbproject/
 .vscode
 out/
-build/
+dist/
