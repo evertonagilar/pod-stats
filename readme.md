@@ -12,13 +12,15 @@
 ### Como usar
 
 ```bash
-# Gera um token para obter informações completas do ambiente
+# Gerar um token para servir de credencial para obter informações completas do container
 export TOKEN=$(head -c 20 /dev/urandom | base64)
 echo $TOKEN
 
 # Subir um container com o token e opcionalmente um cor de background da página
+# A cor também pode ser passado via querystring color na url. ?color=silver
 docker run --env TOKEN=$TOKEN ---env COLOR=silver -p 8080:8080 evertonagilar/pod-stats
-# Execute no browser
+
+# Abra a url no browser passando o token
 curl "http://localhost:8080/pod-stats/index.jsp?token=$TOKEN"
 ```
 
