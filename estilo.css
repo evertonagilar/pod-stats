@@ -18,6 +18,7 @@
     white-space: pre-wrap; /* Manter quebras de linha */
     hori
 }
+
 .bash-panel pre {
     margin: 0; /* Remover margens padrão */
 }

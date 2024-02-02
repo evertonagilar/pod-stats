@@ -9,7 +9,6 @@ COPY WEB-INF /app/WEB-INF
 
 RUN jar -cvf /app/pod-stats.war index.jsp estilo.css WEB-INF
 
-
 # Estágio 2: build da imagem
 FROM tomcat:jre21-temurin
 
