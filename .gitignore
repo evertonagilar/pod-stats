@@ -1,9 +1,6 @@
-# Principais
 *.~
 *.tmp
 *.class
-
-# Editor/IDE específico
 .idea/
 *.iml
 /.classpath
@@ -12,28 +9,4 @@
 /nbproject/
 .vscode
 out/
-
-# Arquivos de build e compilação frontend
-*.o
-*.ko
-*.tmp
-*.map
-*.min.js
-*.min.css
-*.d.ts
-*.d.ts.map
-*.js.map
-*.css.map
-
-# Arquivos do Maven
-target/
-**/target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-build.properties
-
-# Essa lib é preciso apenas para a IDE
-WEB-INF/tomcat-embed-core-11.0.0-M15.jar
+build/
