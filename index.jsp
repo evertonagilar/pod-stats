@@ -9,8 +9,15 @@
 <html lang="pt-BR">
 <head>
     <%
-        String title = "Informações de diagnóstico";
+        String title = "pod-stats :: Informações de diagnóstico";
         String token = System.getenv("TOKEN");
+        String colorBg = request.getParameter("color");
+        if (colorBg == null){
+            colorBg = System.getenv("COLOR");
+            if (colorBg == null) {
+                colorBg = "white";
+            }
+        }
         String headerAuthorization = request.getHeader("Authorization");
         String qsToken = request.getParameter("token");
         boolean tokenValidado = false;
@@ -30,7 +37,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="estilo.css" rel="stylesheet" />
 </head>
-<body>
+<body style="background-color: <%= colorBg %>">
 <div class="container mt-5">
 
     <div class="d-md-flex flex-md-row-reverse align-items-center justify-content-between">
@@ -303,7 +310,7 @@
         <div class="card-body">
             <ul>
                 <%
-                    // Definição de cores para cada tipo de variável
+                    // Definição de cores para alguns prefixo de cores
                     Map<String, String> colors = new HashMap<>();
                     colors.put("DEFAULT", "black");
                     colors.put("KUBERNETES_", "navy");
@@ -345,8 +352,8 @@
                         String key = entry.getKey();
                         String value = entry.getValue();
                         String prefix = key.contains("_") ? key.substring(0, key.indexOf('_') + 1).toUpperCase() : "DEFAULT";
-                        String color = colors.getOrDefault(prefix, "black");
-                        out.println("<li><strong style='color:" + color + "'>" + key + ":</strong> " + value + "</li>");
+                        String colorVar = colors.getOrDefault(prefix, "black");
+                        out.println("<li><strong style='colorBg:" + colorVar + "'>" + key + ":</strong> " + value + "</li>");
                     }
                 %>
             </ul>
