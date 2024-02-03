@@ -1,11 +1,11 @@
-# [pod-stats](https://hub.docker.com/layers/evertonagilar/pod-stats)
+# [pod-stats](https://hub.docker.com/r/evertonagilar/pod-stats)
 
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-46a2f1?logo=docker&logoColor=white)](https://hub.docker.com/layers/evertonagilar/pod-stats)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-46a2f1?logo=docker&logoColor=white)](https://hub.docker.com/r/evertonagilar/pod-stats)
 
 
 Imagem docker de teste para exibir informações de diagnóstico de requisições HTTP
 
-[Acesso o projeto no dockerhub](https://hub.docker.com/layers/evertonagilar/pod-stats).
+[Acesso o projeto no dockerhub](https://hub.docker.com/r/evertonagilar/pod-stats).
 
 
 ### Funcionalidades
