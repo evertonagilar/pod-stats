@@ -15,13 +15,15 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{secrets.DOCKERHUB_USERNAME}}
+        password: ${{secrets.DOCKERHUB_TOKEN}}
 
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: evertonagilar/pod-stats:1.0.0, evertonagilar/pod-stats:latest
+        tags: |
+          evertonagilar/pod-stats:${{github.run_number}}
+          evertonagilar/pod-stats:latest
 
 
